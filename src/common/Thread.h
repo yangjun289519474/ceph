@@ -19,6 +19,9 @@
 #include <pthread.h>
 #include <sys/types.h>
 
+
+//线程是Ceph的基础机制，搞清楚该机制有助于梳理Ceph的流程
+
 class Thread {
  private:
   pthread_t thread_id;
@@ -37,7 +40,7 @@ class Thread {
   virtual ~Thread();
 
  protected:
-  virtual void *entry() = 0;
+  virtual void *entry() = 0;	//由继承Thread的子类去实现，是所有线程执行入口。
 
  private:
   static void *_entry_func(void *arg);
@@ -49,11 +52,11 @@ class Thread {
   bool am_self() const;
   int kill(int signal);
   int try_create(size_t stacksize);
-  void create(const char *name, size_t stacksize = 0);
-  int join(void **prval = 0);
-  int detach();
-  int set_ioprio(int cls, int prio);
-  int set_affinity(int cpuid);
+  void create(const char *name, size_t stacksize = 0);//创建线程
+  int join(void **prval = 0);	//创建thread后，处于active状态的线程，退出前释放资源
+  int detach();//创建thread后，处于unactive状态的线程，退出前释放资源
+  int set_ioprio(int cls, int prio);//设置thread的调度优先级
+  int set_affinity(int cpuid);//退出指定cpiid的线程
 };
 
 #endif
