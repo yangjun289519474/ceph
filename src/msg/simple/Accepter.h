@@ -27,7 +27,7 @@ struct entity_addr_t;
 class Accepter : public Thread {
   SimpleMessenger *msgr;
   bool done;
-  int listen_sd;
+  int listen_sd;	//套接字描述符，调用socket函数的有效返回值
   uint64_t nonce;
   int shutdown_rd_fd;
   int shutdown_wr_fd;
@@ -39,11 +39,11 @@ public:
       shutdown_rd_fd(-1), shutdown_wr_fd(-1)
     {}
     
-  void *entry() override;
+  void *entry() override;//在线程执行函数中，对socket端口进行监听
   void stop();
-  int bind(const entity_addr_t &bind_addr, const set<int>& avoid_ports);
+  int bind(const entity_addr_t &bind_addr, const set<int>& avoid_ports);//创建socket，并绑定线程
   int rebind(const set<int>& avoid_port);
-  int start();
+  int start();	//创建线程
 };
 
 

@@ -361,6 +361,8 @@ int SimpleMessenger::start()
 
 Pipe *SimpleMessenger::add_accept_pipe(int sd)
 {
+	//在锁中，新申请pipe实例，创建读、写、延时线程。
+	//pipe的工作原理待后续详细分析
   lock.Lock();
   Pipe *p = new Pipe(this, Pipe::STATE_ACCEPTING, NULL);
   p->sd = sd;

@@ -65,6 +65,8 @@ int Accepter::create_selfpipe(int *pipe_rd, int *pipe_wr) {
   return 0;
 }
 
+//完成socket服务器端的配置：socket、bind、lisent流程，
+//参数具体含义可参考Unit网络编程
 int Accepter::bind(const entity_addr_t &bind_addr, const set<int>& avoid_ports)
 {
   const md_config_t *conf = msgr->cct->_conf;
@@ -329,6 +331,8 @@ void *Accepter::entry()
     // accept
     sockaddr_storage ss;
     socklen_t slen = sizeof(ss);
+
+	//接收到客户端请求，服务器端的处理
     int sd = ::accept(listen_sd, (sockaddr*)&ss, &slen);
     if (sd >= 0) {
       int r = set_close_on_exec(sd);
@@ -338,7 +342,8 @@ void *Accepter::entry()
       }
       errors = 0;
       ldout(msgr->cct,10) << __func__ << " incoming on sd " << sd << dendl;
-      
+
+	  //核心处理流程：将连接添加到pipe
       msgr->add_accept_pipe(sd);
     } else {
       ldout(msgr->cct,0) << __func__ << " no incoming connection?  sd = " << sd
