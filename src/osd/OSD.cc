@@ -2538,6 +2538,9 @@ int OSD::init()
 
   create_logger();
 
+
+  //OSD模块的操作dispatch的操作集合
+  
   // i'm ready!
   client_messenger->add_dispatcher_head(this);
   cluster_messenger->add_dispatcher_head(this);

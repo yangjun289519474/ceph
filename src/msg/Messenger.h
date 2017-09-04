@@ -387,6 +387,12 @@ public:
    *
    * @param d The Dispatcher to insert into the list.
    */
+
+
+  //将Dispatcher添加到队列头部
+  //即把Dispatcher操作集合注册到Messenger
+  //而Dispatcher操作的具体实现由子类实现
+  
   void add_dispatcher_head(Dispatcher *d) { 
     bool first = dispatchers.empty();
     dispatchers.push_front(d);
@@ -402,6 +408,8 @@ public:
    *
    * @param d The Dispatcher to insert into the list.
    */
+  //将Dispatcher添加到队列尾部
+  
   void add_dispatcher_tail(Dispatcher *d) { 
     bool first = dispatchers.empty();
     dispatchers.push_back(d);
@@ -570,6 +578,10 @@ public:
    *
    * @param m The Message we are testing.
    */
+
+  //下面是Messenger定义的一组抽象操作。
+  //具体操作由Dispatcher的子类实现。
+  
   bool ms_can_fast_dispatch(const Message *m) {
     for (list<Dispatcher*>::iterator p = fast_dispatchers.begin();
 	 p != fast_dispatchers.end();
